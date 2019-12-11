@@ -1,17 +1,18 @@
-<?php
-  class config {
-    private static $instance = NULL;
+<?Php
+$host_name = "localhost";
+$database = "produit"; // Change your database name
+$username = "root";          // Your database user id 
+$password = "";          // Your password
 
-    public static function getConnexion() {
-      if (!isset(self::$instance)) {
-		try{
-        self::$instance = new PDO('mysql:host=localhost;dbname=testing', 'root', '');
-		self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		}catch(Exception $e){
-            die('Erreur: '.$e->getMessage());
-		}
-      }
-      return self::$instance;
-    }
-  }
+//error_reporting(0);// With this no error reporting will be there
+//////// Do not Edit below /////////
+
+$connection = mysqli_connect($host_name, $username, $password, $database);
+
+if (!$connection) {
+    echo "Error: Unable to connect to MySQL.<br>";
+    echo "<br>Debugging errno: " . mysqli_connect_errno();
+    echo "<br>Debugging error: " . mysqli_connect_error();
+    exit;
+}
 ?>

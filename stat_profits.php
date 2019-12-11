@@ -8,7 +8,11 @@
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <title>Dashio - Bootstrap Admin Template</title>
-
+      <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
   <!-- Favicons -->
   <link href="img/favicon.png" rel="icon">
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -17,13 +21,10 @@
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!--external css-->
   <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="css/zabuto_calendar.css">
-  <link rel="stylesheet" type="text/css" href="lib/gritter/css/jquery.gritter.css" />
   <!-- Custom styles for this template -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/style-responsive.css" rel="stylesheet">
-  <script src="lib/chart-master/Chart.js"></script>
-
+  
   <!-- =======================================================
     Template Name: Dashio
     Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
@@ -177,7 +178,8 @@
                   </a>
               </li>
               <li>
-                <a href="index.html#">See all messages</a>
+                <a href="index.html#">See all messages
+                  </a>
               </li>
             </ul>
           </li>
@@ -195,29 +197,25 @@
               </li>
               <li>
                 <a href="index.html#">
-                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
-                  Server Overloaded.
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span> Server Overloaded.
                   <span class="small italic">4 mins.</span>
                   </a>
               </li>
               <li>
                 <a href="index.html#">
-                  <span class="label label-warning"><i class="fa fa-bell"></i></span>
-                  Memory #2 Not Responding.
+                  <span class="label label-warning"><i class="fa fa-bell"></i></span> Memory #2 Not Responding.
                   <span class="small italic">30 mins.</span>
                   </a>
               </li>
               <li>
                 <a href="index.html#">
-                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
-                  Disk Space Reached 85%.
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span> Disk Space Reached 85%.
                   <span class="small italic">2 hrs.</span>
                   </a>
               </li>
               <li>
                 <a href="index.html#">
-                  <span class="label label-success"><i class="fa fa-plus"></i></span>
-                  New User Registered.
+                  <span class="label label-success"><i class="fa fa-plus"></i></span> New User Registered.
                   <span class="small italic">3 hrs.</span>
                   </a>
               </li>
@@ -232,8 +230,9 @@
       </div>
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="login.html">Logout</a></li>
-          
+          <li>
+            <a class="logout" href="login.html">Logout</a>
+          </li>
         </ul>
       </div>
     </header>
@@ -265,7 +264,7 @@
             <ul class="sub">
              <li><a href="affichage.php">meilleure categorie</a></li>
                <li><a href="stat_profits.php">profits</a></li>
-                <li><a href="statistique_stock22">statistique generale de stock</a></li>
+                <li><a href="stat_stock_index.php">statistique generale de stock</a></li>
              
             </ul>
           </li>
@@ -280,7 +279,59 @@
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
     <!--main content start-->
-   
+        <!-- /MAIN CONTENT -->
+
+<?php 
+//index.php
+$connect = mysqli_connect("localhost", "root", "", "testing");
+$query = "SELECT * FROM stat";
+$result = mysqli_query($connect, $query);
+$chart_data = '';
+while($row = mysqli_fetch_array($result))
+{
+ $chart_data .= "{ year:'".$row["year"]."', profit:".$row["profit"].", purchase:".$row["purchase"].", sale:".$row["sale"]."}, ";
+}
+$chart_data = substr($chart_data, 0, -2);
+?>
+
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>chart with PHP & Mysql | lisenme.com </title>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+  
+ </head>
+ <body>
+  <br /><br />
+  <div class="container" style="width:900px;">
+   <h2 align="center">Morris.js chart with PHP & Mysql</h2>
+   <h3 align="center">Last 10 Years Profit, Purchase and Sale Data</h3>   
+   <br /><br />
+   <div id="chart"></div>
+  </div>
+ </body>
+</html>
+
+<script>
+Morris.Bar({
+ element : 'chart',
+ data:[<?php echo $chart_data; ?>],
+ xkey:'year',
+ ykeys:['profit', 'purchase', 'sale'],
+ labels:['Profit', 'Purchase', 'Sale'],
+ hideHover:'auto',
+ stacked:true
+});
+</script>
+
+
+
+
+        
     <!--main content end-->
     <!--footer start-->
     <footer class="site-footer">
@@ -297,7 +348,7 @@
           -->
           Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
         </div>
-        <a href="index.html#" class="go-top">
+        <a href="basic_table.html#" class="go-top">
           <i class="fa fa-angle-up"></i>
           </a>
       </div>
@@ -305,82 +356,9 @@
     <!--footer end-->
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
-  <script src="lib/jquery/jquery.min.js"></script>
 
-  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-  <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
-  <script src="lib/jquery.scrollTo.min.js"></script>
-  <script src="lib/jquery.nicescroll.js" type="text/javascript"></script>
-  <script src="lib/jquery.sparkline.js"></script>
-  <!--common script for all pages-->
-  <script src="lib/common-scripts.js"></script>
-  <script type="text/javascript" src="lib/gritter/js/jquery.gritter.js"></script>
-  <script type="text/javascript" src="lib/gritter-conf.js"></script>
   <!--script for this page-->
-  <script src="lib/sparkline-chart.js"></script>
-  <script src="lib/zabuto_calendar.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var unique_id = $.gritter.add({
-        // (string | mandatory) the heading of the notification
-        title: 'Welcome to Dashio!',
-        // (string | mandatory) the text inside the notification
-        text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo.',
-        // (string | optional) the image to display on the left
-        image: 'img/ui-sam.jpg',
-        // (bool | optional) if you want it to fade out on its own or just sit there
-        sticky: false,
-        // (int | optional) the time you want it to be alive for before fading out
-        time: 8000,
-        // (string | optional) the class name you want to apply to that specific message
-        class_name: 'my-sticky-class'
-      });
 
-      return false;
-    });
-  </script>
-  <script type="application/javascript">
-    $(document).ready(function() {
-      $("#date-popover").popover({
-        html: true,
-        trigger: "manual"
-      });
-      $("#date-popover").hide();
-      $("#date-popover").click(function(e) {
-        $(this).hide();
-      });
-
-      $("#my-calendar").zabuto_calendar({
-        action: function() {
-          return myDateFunction(this.id, false);
-        },
-        action_nav: function() {
-          return myNavFunction(this.id);
-        },
-        ajax: {
-          url: "show_data.php?action=1",
-          modal: true
-        },
-        legend: [{
-            type: "text",
-            label: "Special event",
-            badge: "00"
-          },
-          {
-            type: "block",
-            label: "Regular event",
-          }
-        ]
-      });
-    });
-
-    function myNavFunction(id) {
-      $("#date-popover").hide();
-      var nav = $("#" + id).data("navigation");
-      var to = $("#" + id).data("to");
-      console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
-    }
-  </script>
 </body>
 
 </html>
